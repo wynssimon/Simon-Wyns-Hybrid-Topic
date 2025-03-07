@@ -108,7 +108,7 @@ export default function NotificationDemo() {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <Bell className="h-5 w-5"/>
-                    Notification Sender
+                    Email/ SMS sturen
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -237,11 +237,6 @@ export default function NotificationDemo() {
                     </TabsContent>
                 </Tabs>
             </CardContent>
-            <CardFooter className="flex flex-col items-start">
-                <p className="text-sm text-muted-foreground">
-                    © 2025
-                </p>
-            </CardFooter>
         </Card>
     )
 }

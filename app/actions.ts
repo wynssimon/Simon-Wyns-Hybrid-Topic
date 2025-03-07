@@ -7,7 +7,7 @@ let novuClient: Novu | null = null
 function getNovuClient() {
   if (!novuClient) {
     if (!process.env.NOVU_API_KEY) {
-      throw new Error("NOVU_API_KEY environment variable is not set")
+      throw new Error("Geen NOVU_API_KEY environment variabele")
     }
     novuClient = new Novu(process.env.NOVU_API_KEY)
   }
@@ -28,24 +28,14 @@ export async function sendNotification(data: NotificationPayload) {
   try {
     const novu = getNovuClient()
 
-    // Get the workflow ID based on notification type
     const workflowId = data.type === "email" ? process.env.NOVU_EMAIL_WORKFLOW_ID : process.env.NOVU_SMS_WORKFLOW_ID
 
-    if (!workflowId) {
-      return {
-        success: false,
-        error: `${data.type.toUpperCase()} workflow ID is not configured`,
-      }
-    }
 
-    // Prepare subscriber (create if doesn't exist)
     const subscriberId = data.to.replace(/[^a-zA-Z0-9]/g, "")
 
     try {
-      // Check if subscriber exists
       await novu.subscribers.get(subscriberId)
     } catch (error) {
-      // Create subscriber if doesn't exist
       await novu.subscribers.identify(subscriberId, {
         email: data.type === "email" ? data.to : undefined,
         phone: data.type === "sms" ? data.to : undefined,
@@ -53,8 +43,7 @@ export async function sendNotification(data: NotificationPayload) {
       })
     }
 
-    // Send the notification
-    await novu.trigger(workflowId, {
+    await novu.trigger(workflowId!, {
       to: {
         subscriberId: subscriberId,
       },
